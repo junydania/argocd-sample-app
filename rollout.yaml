@@ -1,0 +1,51 @@
+# rollout.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nginx-rollout  # Changed to match the application name
+spec:
+  replicas: 3
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 30s}
+      - setWeight: 40
+      - pause: {duration: 30s}
+      - setWeight: 60
+      - pause: {duration: 30s}
+      - setWeight: 80
+      - pause: {duration: 30s}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: nginx  # Changed to match service selector
+  template:
+    metadata:
+      labels:
+        app: nginx  # Changed to match service selector
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.0
+        ports:
+        - containerPort: 80
+        readinessProbe:  # Added health checks from deployment
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        volumeMounts:  # Added volume mounts from deployment
+        - name: custom-content
+          mountPath: /usr/share/nginx/html
+      volumes:  # Added volumes from deployment
+      - name: custom-content
+        configMap:
+          name: nginx-content
