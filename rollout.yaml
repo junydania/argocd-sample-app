@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.27.4_dania
+        image: nginx:1.27.4
         ports:
         - containerPort: 80
         readinessProbe:  # Added health checks from deployment
