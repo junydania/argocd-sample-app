@@ -12,6 +12,6 @@ data:
     </head>
     <body>
       <h1>Hello, Kubernetes!</h1>
-      <p>This is a custom NGINX page my friend deployed using a Kubernetes Deployment.</p>
+      <p>This is a custom NGINX page for Voiceflow Infra ArgoCD Rollout Deployment.</p>
     </body>
     </html>
