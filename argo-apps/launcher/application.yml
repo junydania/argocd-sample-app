@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/junydania/argocd-sample-app.git"
+    targetRevision: "main"
+    path: "argo-apps/apps"  # Path to rollout definition
+  destination:
+    name: "in-cluster"
+    namespace: "argocd"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
